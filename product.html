@@ -1,0 +1,622 @@
+
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <!-- =====================================================
+         SEO
+
+         product.js sẽ tự thay đổi:
+         - Title
+         - Meta Description
+         - Robots
+         theo đúng sản phẩm đang xem.
+    ====================================================== -->
+
+    <title id="pageTitle">
+        Chi tiết sản phẩm | VITASPORT
+    </title>
+
+    <meta
+        id="metaDescription"
+        name="description"
+        content="Thông tin chi tiết sản phẩm thể thao tại VITASPORT."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <!-- =====================================================
+         CANONICAL EARLY NORMALIZATION
+
+         Mục tiêu:
+         - ?id=5   -> ?id=P05
+         - ?id=P5  -> ?id=P05
+         - ?id=P05 -> giữ nguyên
+
+         Canonical được tạo NGAY TRONG HEAD
+         để URL hiện tại và canonical đồng bộ
+         trước khi product.js chạy.
+
+         Chỉ áp dụng cho P01 -> P52.
+         product.js tiếp tục kiểm tra sản phẩm
+         và xử lý SEO động phía sau.
+    ====================================================== -->
+
+    <script>
+    (function () {
+
+        const SITE_URL =
+            "https://tranthiquynhnhu0901-hue.github.io/shopthethao/";
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const rawId =
+            String(
+                params.get("id") || ""
+            )
+                .trim()
+                .toUpperCase();
+
+        let productCode = "";
+
+        /*
+         * Hỗ trợ:
+         * P01
+         * P1
+         * 1
+         * 01
+         */
+
+        if (
+            /^P\d{1,2}$/.test(rawId)
+        ) {
+
+            const number =
+                Number(
+                    rawId.slice(1)
+                );
+
+            if (
+                Number.isInteger(number)
+                &&
+                number >= 1
+                &&
+                number <= 52
+            ) {
+
+                productCode =
+                    "P"
+                    +
+                    String(number)
+                        .padStart(2, "0");
+
+            }
+
+        }
+        else if (
+            /^\d{1,2}$/.test(rawId)
+        ) {
+
+            const number =
+                Number(rawId);
+
+            if (
+                Number.isInteger(number)
+                &&
+                number >= 1
+                &&
+                number <= 52
+            ) {
+
+                productCode =
+                    "P"
+                    +
+                    String(number)
+                        .padStart(2, "0");
+
+            }
+
+        }
+
+        /*
+         * Chỉ tạo canonical sớm
+         * khi ID nằm trong P01 -> P52.
+         *
+         * URL không hợp lệ sẽ được
+         * product.js xử lý sau.
+         */
+
+        if (!productCode) {
+            return;
+        }
+
+        const normalizedURL =
+            window.location.pathname
+            +
+            "?id="
+            +
+            encodeURIComponent(
+                productCode
+            );
+
+        /*
+         * Chuẩn hóa URL hiển thị sớm.
+         *
+         * Ví dụ:
+         * product.html?id=5
+         *
+         * thành:
+         * product.html?id=P05
+         *
+         * Không reload trang.
+         */
+
+        if (
+            window.location.pathname
+            +
+            window.location.search
+            !==
+            normalizedURL
+        ) {
+
+            window.history.replaceState(
+                null,
+                "",
+                normalizedURL
+            );
+
+        }
+
+        /*
+         * Tạo canonical ngay trong HEAD.
+         */
+
+        const canonical =
+            document.createElement(
+                "link"
+            );
+
+        canonical.rel =
+            "canonical";
+
+        canonical.href =
+            SITE_URL
+            +
+            "product.html?id="
+            +
+            encodeURIComponent(
+                productCode
+            );
+
+        document.head.appendChild(
+            canonical
+        );
+
+    })();
+    </script>
+
+    <!-- =====================================================
+         OPEN GRAPH
+    ====================================================== -->
+
+    <meta
+        property="og:type"
+        content="product"
+    >
+
+    <meta
+        property="og:locale"
+        content="vi_VN"
+    >
+
+    <meta
+        property="og:site_name"
+        content="VITASPORT"
+    >
+
+    <meta
+        id="ogTitle"
+        property="og:title"
+        content="Sản phẩm VITASPORT"
+    >
+
+    <meta
+        id="ogDescription"
+        property="og:description"
+        content="Khám phá sản phẩm thể thao tại VITASPORT."
+    >
+
+    <meta
+        property="og:url"
+        content="https://tranthiquynhnhu0901-hue.github.io/shopthethao/product.html"
+    >
+
+    <meta
+        id="ogImage"
+        property="og:image"
+        content="https://tranthiquynhnhu0901-hue.github.io/shopthethao/images/banners/bn02-shop-hero.webp"
+    >
+
+    <meta
+        property="og:image:alt"
+        content="Sản phẩm thể thao VITASPORT"
+    >
+
+    <!-- =====================================================
+         PRODUCT OPEN GRAPH
+
+         product.js sẽ tự thay:
+         - Giá
+         - Tiền tệ
+         - Tình trạng tồn kho
+    ====================================================== -->
+
+    <meta
+        property="product:price:amount"
+        content=""
+    >
+
+    <meta
+        property="product:price:currency"
+        content="VND"
+    >
+
+    <meta
+        property="product:availability"
+        content=""
+    >
+
+    <!-- =====================================================
+         SOCIAL CARD
+    ====================================================== -->
+
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    >
+
+    <meta
+        name="twitter:title"
+        content="Sản phẩm VITASPORT"
+    >
+
+    <meta
+        name="twitter:description"
+        content="Khám phá sản phẩm thể thao tại VITASPORT."
+    >
+
+    <meta
+        name="twitter:image"
+        content="https://tranthiquynhnhu0901-hue.github.io/shopthethao/images/banners/bn02-shop-hero.webp"
+    >
+
+    <meta
+        name="twitter:image:alt"
+        content="Sản phẩm thể thao VITASPORT"
+    >
+
+    <!-- =====================================================
+         SCHEMA.ORG
+
+         product.js sẽ tự ghi dữ liệu động vào đây:
+         - Product
+         - Offer
+         - BreadcrumbList
+
+         Không tự tạo Review / AggregateRating.
+    ====================================================== -->
+
+    <script
+        id="productSchema"
+        type="application/ld+json"
+    >
+    {}
+    </script>
+
+    <!-- =====================================================
+         CSS - VITASPORT
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/style.css?v=6.6"
+    >
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="container nav">
+
+            <!-- LOGO -->
+
+            <a
+                class="logo"
+                href="./"
+                aria-label="VITASPORT - Trang chủ"
+            >
+                VITA<span>SPORT</span>
+            </a>
+
+            <!-- MENU -->
+
+            <nav>
+
+                <a href="./">
+                    Trang chủ
+                </a>
+
+                <a
+                    class="active"
+                    href="shop.html"
+                >
+                    Cửa hàng
+                </a>
+
+                <a href="gioi-thieu/">
+                    Giới thiệu
+                </a>
+
+                <a href="/shop-the-thao-v2/ke-hoach-tap-luyen.html">
+                    Workout
+                </a>
+
+                <a href="blog.html">
+                    Blog
+                </a>
+
+            </nav>
+
+            <!-- CART -->
+
+            <a
+                class="cart-link"
+                href="cart.html"
+                aria-label="Mở giỏ hàng"
+            >
+
+                🛒
+
+                <span class="cart-count">
+                    0
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- =====================================================
+         BREADCRUMB
+    ====================================================== -->
+
+    <div class="product-breadcrumb-wrap">
+
+        <div class="container">
+
+            <nav
+                class="product-breadcrumb"
+                aria-label="Breadcrumb"
+            >
+
+                <a href="./">
+                    Trang chủ
+                </a>
+
+                <span>
+                    /
+                </span>
+
+                <a href="shop.html">
+                    Cửa hàng
+                </a>
+
+                <span>
+                    /
+                </span>
+
+                <span id="breadcrumbProduct">
+                    Chi tiết sản phẩm
+                </span>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         PRODUCT DETAIL
+    ====================================================== -->
+
+    <main
+        id="productDetail"
+        class="product-detail-page"
+    >
+
+        <!--
+            Toàn bộ nội dung sản phẩm
+            sẽ được product.js render tại đây.
+
+            Bao gồm:
+
+            - Tên sản phẩm
+            - Ảnh sản phẩm
+            - Mã sản phẩm
+            - Môn thể thao / danh mục
+            - Rating hiển thị
+            - Mô tả ngắn
+            - Giá
+            - Giá cũ
+            - Giảm giá
+            - Tồn kho
+            - Size / lựa chọn
+            - Số lượng
+            - Thêm vào giỏ hàng
+            - Mô tả chi tiết
+            - Điểm nổi bật
+            - Đối tượng phù hợp
+            - Thông số
+            - Hướng dẫn sử dụng
+            - Hướng dẫn bảo quản
+            - Bài tập liên quan
+            - Môn thể thao liên quan
+            - Sản phẩm liên quan
+        -->
+
+    </main>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <!-- =====================================================
+         IMAGE ENGINE
+    ====================================================== -->
+
+    <script src="js/image-factory.js"></script>
+
+    <!-- =====================================================
+         DATABASE GỐC
+         P01 - P12
+    ====================================================== -->
+
+    <script src="js/data.js"></script>
+
+    <!-- =====================================================
+         DATABASE MỞ RỘNG
+
+         Bao gồm:
+         - Category
+         - Metadata P01 - P12
+         - Products P13 - P52
+         - SEO
+         - Related Data
+
+         Sau khi file này chạy:
+         products = P01 -> P52
+    ====================================================== -->
+
+    <script src="js/catalog-data.js?v=6.7"></script>
+
+    <!-- =====================================================
+         LOGIC CHUNG WEBSITE
+
+         Bao gồm:
+         - Giỏ hàng
+         - Format tiền
+         - Utility dùng chung
+    ====================================================== -->
+
+    <script src="js/main.js"></script>
+
+    <!-- =====================================================
+         PRODUCT DETAIL ENGINE
+
+         URL chuẩn của sản phẩm:
+
+         product.html?id=P01
+         product.html?id=P02
+         ...
+         product.html?id=P52
+
+         product.js vẫn có thể đọc URL số cũ
+         để tương thích nếu người dùng truy cập
+         từ liên kết cũ.
+
+         Nếu URL đang là dạng số, ví dụ:
+
+         product.html?id=5
+
+         URL được chuẩn hóa sớm trong HEAD thành:
+
+         product.html?id=P05
+
+         Toàn bộ link nội bộ mới
+         sẽ sử dụng mã P01 -> P52.
+
+         Sau đó product.js tiếp tục xử lý:
+         - Render sản phẩm
+         - Title
+         - Meta Description
+         - Robots
+         - Canonical
+         - Open Graph
+         - Twitter Card
+         - Product Schema
+         - Offer Schema
+         - Breadcrumb Schema
+         - Related Products
+
+         Canonical chuẩn:
+
+         product.html?id=P01
+         product.html?id=P02
+         ...
+         product.html?id=P52
+    ====================================================== -->
+
+    <script src="js/product.js?v=6.6"></script>
+
+    <!-- =====================================================
+         VITASPORT AI COACH & CUSTOMER ASSISTANT
+
+         Đặt cuối cùng sau:
+         - image-factory.js
+         - data.js
+         - catalog-data.js
+         - main.js
+         - product.js
+
+         Để chatbot có thể truy cập:
+         - toàn bộ P01 - P52
+         - dữ liệu sản phẩm
+         - sản phẩm hiện tại
+         - giá
+         - size
+         - tồn kho
+         - giỏ hàng
+         - utility chung
+
+         Chatbot có thể hiểu ngữ cảnh:
+         "mẫu này"
+         "cái này"
+         "sản phẩm này"
+         "giá bao nhiêu"
+         "có size gì"
+         "còn hàng không"
+         "có mẫu rẻ hơn không"
+
+         Bản v6.5 hỗ trợ cả:
+         - ?id=5
+         - ?id=P05
+
+         Và link sản phẩm chatbot sinh ra
+         dùng chuẩn P01 -> P52.
+    ====================================================== -->
+
+    <script src="js/chatbot.js?v=6.5"></script>
+
+</body>
+
+</html>
